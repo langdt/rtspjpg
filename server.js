@@ -11,6 +11,8 @@ if (camKeys.length == 0) {
     process.exit(1);
 }
 
+const interval = getInterval();
+
 (async function main() {
   createImagesDir();
   startExpress();
@@ -27,7 +29,7 @@ if (camKeys.length == 0) {
     } catch (error) {
       console.error(error);
     }
-  }, 5000);
+  }, interval);
 })();
 
 function createImagesDir() {
@@ -49,6 +51,16 @@ function getCameraURLs() {
     }
   });
   return camURLS;
+}
+
+function getInterval() {
+    const env = process.env;
+    if (env['REFRESH_INTERVAL_MS']) {
+        return parseInt(env['REFRESH_INTERVAL_MS']);
+    }
+    else {
+        return 5000;
+    }
 }
 
 function startExpress() {
